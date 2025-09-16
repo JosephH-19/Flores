@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flor Amarilla para Ohanna</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --color-bg: linear-gradient(to top, #00d4ff, #000);
+        --line-color: linear-gradient(
+          to left top,
+          #82ff86 20%,
+          #144425,
+          #104e1c
+        );
+        --flower-center: radial-gradient(circle, #000, #ff5e00);
+        --leaf-color: radial-gradient(circle, #82ff86, #104e1c);
+        --petal-color: radial-gradient(circle, #ff5e00, #ffbb00);
+      }
+
+      body {
+        background-image: var(--color-bg);
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        overflow-x: hidden;
+        font-family: "Poppins", sans-serif;
+      }
+
+      h1 {
+        position: absolute;
+        top: 20px;
+        text-align: center;
+        width: 100%;
+        color: #fff;
+        font-family: "Poppins", sans-serif;
+        font-weight: 300;
+        font-size: 28px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .flower_wrapper {
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        z-index: 5;
+      }
+
+      .flower_stem {
+        width: 20px;
+        height: 400px;
+        background-image: var(--line-color);
+        border-radius: 20px;
+      }
+
+      .flower_center {
+        position: absolute;
+        top: -93px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: var(--flower-center);
+        z-index: 5;
+        opacity: 0;
+        animation: open-flower-center 1s ease-out forwards;
+        animation-delay: 1s;
+      }
+
+      .flower_petal {
+        position: absolute;
+        width: 70px;
+        height: 140px;
+        background: var(--petal-color);
+        clip-path: ellipse(35% 50% at 50% 50%);
+        top: -40%;
+        left: 50%;
+        transform-origin: center bottom;
+        opacity: 0;
+        animation: open-flower-petal 1s ease-out forwards;
+      }
+
+      .flower_petal-1 {
+        --rotate-deg: 0deg;
+        animation-delay: 1.2s;
+      }
+      .flower_petal-2 {
+        --rotate-deg: 30deg;
+        animation-delay: 1.25s;
+      }
+      .flower_petal-3 {
+        --rotate-deg: 60deg;
+        animation-delay: 1.3s;
+      }
+      .flower_petal-4 {
+        --rotate-deg: 90deg;
+        animation-delay: 1.35s;
+      }
+      .flower_petal-5 {
+        --rotate-deg: 120deg;
+        animation-delay: 1.4s;
+      }
+      .flower_petal-6 {
+        --rotate-deg: 150deg;
+        animation-delay: 1.45s;
+      }
+      .flower_petal-7 {
+        --rotate-deg: 180deg;
+        animation-delay: 1.5s;
+      }
+      .flower_petal-8 {
+        --rotate-deg: 210deg;
+        animation-delay: 1.55s;
+      }
+      .flower_petal-9 {
+        --rotate-deg: 240deg;
+        animation-delay: 1.6s;
+      }
+      .flower_petal-10 {
+        --rotate-deg: 270deg;
+        animation-delay: 1.65s;
+      }
+      .flower_petal-11 {
+        --rotate-deg: 300deg;
+        animation-delay: 1.7s;
+      }
+      .flower_petal-12 {
+        --rotate-deg: 330deg;
+        animation-delay: 1.75s;
+      }
+
+      .flower_leaf {
+        position: absolute;
+        width: 70px;
+        height: 120px;
+        background: var(--leaf-color);
+        border-radius: 100px 20px 100px 20px;
+        transform-origin: center bottom;
+      }
+
+      .flower_leaf-1 {
+        left: 60%;
+        bottom: 150px;
+        transform: translateX(-45%) rotate(80deg);
+      }
+
+      .flower_leaf-2 {
+        left: 60%;
+        bottom: 200px;
+        transform: translateX(-55%) rotate(-80deg);
+      }
+
+      /* Florecitas pequeñas decorativas */
+      .small-flower {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        z-index: 3;
+        opacity: 0;
+        animation: appear-small-flower 2s ease-out forwards;
+      }
+
+      .small-flower::before {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: linear-gradient(circle, #ffbb00, #ff5e00);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .small-flower::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: linear-gradient(circle, #ffdd00, #ffbb00);
+        border-radius: 50% 20% 50% 20%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: rotate-small-flower 3s linear infinite;
+      }
+
+      .small-flower-1 {
+        top: 15%;
+        left: 10%;
+        animation-delay: 2s;
+      }
+      .small-flower-2 {
+        top: 25%;
+        right: 15%;
+        animation-delay: 2.3s;
+      }
+      .small-flower-3 {
+        top: 45%;
+        left: 8%;
+        animation-delay: 2.6s;
+      }
+      .small-flower-4 {
+        top: 35%;
+        right: 10%;
+        animation-delay: 2.9s;
+      }
+      .small-flower-5 {
+        top: 60%;
+        left: 12%;
+        animation-delay: 3.2s;
+      }
+      .small-flower-6 {
+        top: 55%;
+        right: 8%;
+        animation-delay: 3.5s;
+      }
+
+      @keyframes appear-small-flower {
+        0% {
+          opacity: 0;
+          transform: scale(0) rotate(0deg);
+        }
+        100% {
+          opacity: 0.7;
+          transform: scale(1) rotate(360deg);
+        }
+      }
+
+      @keyframes rotate-small-flower {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+
+      @keyframes open-flower-petal {
+        0% {
+          transform: translateX(-50%) translateY(50px) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(-50%) translateY(0) rotate(var(--rotate-deg));
+          opacity: 1;
+        }
+      }
+
+      @keyframes open-flower-center {
+        0% {
+          transform: translateX(-50%) scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      .flower_light,
+      .light {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: rgb(255, 251, 0);
+        border-radius: 50%;
+        filter: blur(2px);
+        z-index: 1;
+      }
+
+      .flower_light {
+        bottom: 450px;
+        animation: light-ans 4s linear infinite backwards;
+      }
+
+      .light-1 {
+        left: 5%;
+        animation-delay: 1s;
+      }
+      .light-2 {
+        left: 15%;
+        animation-delay: 0.5s;
+      }
+      .light-3 {
+        left: 25%;
+        animation-delay: 0.3s;
+      }
+      .light-4 {
+        left: 35%;
+        animation-delay: 0.9s;
+      }
+      .light-5 {
+        left: 45%;
+        animation-delay: 1.5s;
+      }
+      .light-6 {
+        left: 55%;
+        animation-delay: 3s;
+      }
+      .light-7 {
+        left: 65%;
+        animation-delay: 2s;
+      }
+      .light-8 {
+        left: 75%;
+        animation-delay: 3.5s;
+      }
+      .light-9 {
+        left: 85%;
+        animation-delay: 2s;
+      }
+      .light-10 {
+        left: 92%;
+        animation-delay: 3.5s;
+      }
+      .light-11 {
+        left: 95%;
+        animation-delay: 3s;
+      }
+      .light-12 {
+        left: 98%;
+        animation-delay: 0.5s;
+      }
+      
+      .light {
+        position: absolute;
+        bottom: 0px;
+        width: 10px;
+        height: 10px;
+        background-color: rgb(255, 251, 0);
+        border-radius: 50%;
+        filter: blur(2px);
+        animation: light-ans-background 7s linear infinite backwards;
+        z-index: 1;
+      }
+
+      .light-1 {
+        left: 100px;
+        animation-delay: 1s;
+      }
+      .light-2 {
+        left: 200px;
+        animation-delay: 0.5s;
+      }
+      .light-3 {
+        left: 600px;
+        animation-delay: 0.3s;
+      }
+      .light-4 {
+        left: 800px;
+        animation-delay: 0.9s;
+      }
+      .light-5 {
+        left: 450px;
+        animation-delay: 1.5s;
+      }
+      .light-6 {
+        left: 100px;
+        animation-delay: 3s;
+      }
+      .light-7 {
+        left: 900px;
+        animation-delay: 2s;
+      }
+      .light-8 {
+        left: 600px;
+        animation-delay: 3.5s;
+      }
+      .light-9 {
+        left: 700px;
+        animation-delay: 2s;
+      }
+      .light-10 {
+        left: 950px;
+        animation-delay: 3.5s;
+      }
+      .light-11 {
+        left: 750px;
+        animation-delay: 3s;
+      }
+      .light-12 {
+        left: 850px;
+        animation-delay: 0.5s;
+      }
+
+      @keyframes light-ans {
+        0% {
+          opacity: 0;
+          transform: translateY(0px);
+        }
+        25% {
+          opacity: 1;
+          transform: translateY(-50px) translateX(-20px);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-150px) translateX(20px);
+          filter: blur(2px);
+        }
+        75% {
+          transform: translateY(-200px) translateX(-20px);
+          filter: blur(2px);
+        }
+        100% {
+          transform: translateY(-300px);
+          opacity: 0;
+          filter: blur(10px);
+        }
+      }
+
+      @keyframes light-ans-background {
+        0% {
+          opacity: 0;
+          transform: translateY(0) translateX(0);
+        }
+        25% {
+          opacity: 1;
+          transform: translateY(-100px) translateX(10px);
+        }
+        50% {
+          transform: translateY(-200px) translateX(-10px);
+        }
+        75% {
+          transform: translateY(-400px) translateX(15px);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-600px) translateX(-5px);
+        }
+      }
+
+      .buttons-container {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 20px;
+        z-index: 999;
+      }
+
+      .flower-btn {
+        padding: 15px 30px;
+        font-size: 18px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: #eeeeee;
+        background: linear-gradient(45deg, #ffbb00, #ff5e00);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .flower-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .letter-btn {
+        padding: 15px 25px;
+        font-size: 18px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: #333;
+        background: linear-gradient(45deg, #fff, #f8f8f8);
+        border: 2px solid #ffbb00;
+        border-radius: 15px;
+        cursor: pointer;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .letter-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(45deg, #ffbb00, #ff5e00);
+        color: white;
+      }
+
+      .letter-btn::before {
+        content: '💌';
+        font-size: 20px;
+      }
+
+      /* Modal para la carta */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, #fff 0%, #f8f5f0 100%);
+        margin: 3% auto;
+        padding: 40px;
+        border: none;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 700px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        position: relative;
+        animation: modalFadeIn 0.5s ease-out;
+      }
+
+      @keyframes modalFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-50px) scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .close {
+        color: #999;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .close:hover {
+        color: #ff5e00;
+      }
+
+      .letter-header {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #ffbb00;
+        padding-bottom: 20px;
+      }
+
+      .letter-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ff5e00;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .letter-subtitle {
+        font-size: 16px;
+        color: #666;
+        font-style: italic;
+      }
+
+      .letter-content {
+        line-height: 1.8;
+        color: #444;
+        font-size: 18px;
+        text-align: justify;
+        text-indent: 20px;
+      }
+
+      .letter-content p {
+        margin-bottom: 20px;
+      }
+
+      .letter-signature {
+        text-align: right;
+        margin-top: 30px;
+        font-style: italic;
+        color: #666;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+      }
+
+      /* Decoraciones en el modal */
+      .modal-decoration {
+        position: absolute;
+        color: #ffbb00;
+        opacity: 0.3;
+        font-size: 20px;
+        animation: float 3s ease-in-out infinite alternate;
+      }
+
+      .decoration-1 {
+        top: 20px;
+        left: 20px;
+        animation-delay: 0s;
+      }
+
+      .decoration-2 {
+        top: 20px;
+        right: 20px;
+        animation-delay: 1s;
+      }
+
+      .decoration-3 {
+        bottom: 20px;
+        left: 20px;
+        animation-delay: 2s;
+      }
+
+      .decoration-4 {
+        bottom: 20px;
+        right: 20px;
+        animation-delay: 1.5s;
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px) rotate(0deg); }
+        100% { transform: translateY(-10px) rotate(5deg); }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .buttons-container {
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+        }
+        
+        .flower-btn, .letter-btn {
+          font-size: 16px;
+          padding: 12px 20px;
+        }
+
+        .modal-content {
+          margin: 10% auto;
+          padding: 20px;
+          width: 95%;
+        }
+
+        .letter-title {
+          font-size: 24px;
+        }
+
+        .letter-content {
+          font-size: 16px;
+        }
+
+        h1 {
+          font-size: 20px;
+          padding: 0 20px;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <audio
+      id="id_audio"
+      src="videoplayback.weba"
+    ></audio>
+    
+    <h1>Esta es la flor, para el amor de mi vida Ohanna 💖</h1>
+
+    <div class="buttons-container">
+      <button class="flower-btn">🎵 MÚSICA</button>
+      <button class="letter-btn">Carta de Amor</button>
+    </div>
+
+    <!-- Florecitas pequeñas decorativas -->
+    <div class="small-flower small-flower-1"></div>
+    <div class="small-flower small-flower-2"></div>
+    <div class="small-flower small-flower-3"></div>
+    <div class="small-flower small-flower-4"></div>
+    <div class="small-flower small-flower-5"></div>
+    <div class="small-flower small-flower-6"></div>
+    
+    <div class="sunflower">
+      <div class="flower_wrapper">
+        <div class="flower_stem"></div>
+        <div class="flower_center"></div>
+        <div class="flower_petal flower_petal-1"></div>
+        <div class="flower_petal flower_petal-2"></div>
+        <div class="flower_petal flower_petal-3"></div>
+        <div class="flower_petal flower_petal-4"></div>
+        <div class="flower_petal flower_petal-5"></div>
+        <div class="flower_petal flower_petal-6"></div>
+        <div class="flower_petal flower_petal-7"></div>
+        <div class="flower_petal flower_petal-8"></div>
+        <div class="flower_petal flower_petal-9"></div>
+        <div class="flower_petal flower_petal-10"></div>
+        <div class="flower_petal flower_petal-11"></div>
+        <div class="flower_petal flower_petal-12"></div>
+
+        <div class="flower_leaf flower_leaf-1"></div>
+        <div class="flower_leaf flower_leaf-2"></div>
+
+        <div class="flower_light flower_light-1"></div>
+        <div class="flower_light flower_light-2"></div>
+        <div class="flower_light flower_light-3"></div>
+        <div class="flower_light flower_light-4"></div>
+        <div class="flower_light flower_light-5"></div>
+        <div class="flower_light flower_light-6"></div>
+        <div class="flower_light flower_light-7"></div>
+        <div class="flower_light flower_light-8"></div>
+      </div>
+    </div>
+
+    <div class="light light-1"></div>
+    <div class="light light-2"></div>
+    <div class="light light-3"></div>
+    <div class="light light-4"></div>
+    <div class="light light-5"></div>
+    <div class="light light-6"></div>
+    <div class="light light-7"></div>
+    <div class="light light-8"></div>
+    <div class="light light-9"></div>
+    <div class="light light-10"></div>
+    <div class="light light-11"></div>
+    <div class="light light-12"></div>
+
+    <!-- Modal de la carta -->
+    <div id="letterModal" class="modal">
+      <div class="modal-content">
+        <span class="modal-decoration decoration-1">🌸</span>
+        <span class="modal-decoration decoration-2">🌺</span>
+        <span class="modal-decoration decoration-3">🌻</span>
+        <span class="modal-decoration decoration-4">💝</span>
+        
+        <span class="close">&times;</span>
+        
+        <div class="letter-header">
+          <h2 class="letter-title">Ohanna, Mi Estrella Eterna</h2>
+          <p class="letter-subtitle">Una carta de amor desde el corazón</p>
+        </div>
+        
+        <div class="letter-content">
+          <p>En la vastedad del universo, donde brillan las estrellas, hay una luz que ilumina mi alma, Ohanna, mi querida. Como la luna en la noche, tu belleza resplandece, guíame en la oscuridad, mi amada, mi estrella.</p>
+          
+          <p>En tus ojos, un abismo de misterio y ternura, donde me pierdo y encuentro mi destino eterno. Tu sonrisa, un rayo de sol que calienta mi corazón, Ohanna, mi musa, mi inspiración, mi razón.</p>
+          
+          <p>Como el poeta en su verso, te canto con pasión, tejiendo palabras que hablen de mi devoción. En cada sílaba, un susurro de amor infinito, Ohanna, mi amor, mi todo, mi eternidad.</p>
+          
+          <p>En el laberinto de la vida, tu mano es mi guía, juntos, construimos un futuro, una promesa mía. Como el ingeniero en su obra, diseño tu nombre, Ohanna, en cada línea, en cada código, mi amor.</p>
+          
+          <p>Que la poesía de mi alma te envuelva en su abrazo, Ohanna, mi amada, mi musa, mi eterno lazo. En cada verso, un juramento, una promesa de amor, Ohanna, mi estrella, mi vida, mi corazón.</p>
+        </div>
+        
+        <div class="letter-signature">
+          <p>Con todo mi amor,<br>
+          <strong>J.Eduardo HB 💖</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const flowerBtn = document.querySelector(".flower-btn");
+      const letterBtn = document.querySelector(".letter-btn");
+      const audio = document.getElementById("id_audio");
+      const modal = document.getElementById("letterModal");
+      const closeBtn = document.querySelector(".close");
+
+      flowerBtn.onclick = () => {
+        audio.play();
+        audio.volume = 0.4;
+      }
+
+      letterBtn.onclick = () => {
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevenir scroll del body
+      }
+
+      closeBtn.onclick = () => {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // Restaurar scroll del body
+      }
+
+      window.onclick = (event) => {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      }
+
+      // Cerrar modal con tecla Escape
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.style.display === "block") {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      });
+    </script>
+  </body>
+</html>
