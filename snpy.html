@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Snoopy 🐶</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Nubes flotantes */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.8;
+            animation: floatCloud 30s infinite linear;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+        }
+
+        .cloud1 {
+            width: 100px;
+            height: 40px;
+            top: 10%;
+            left: -100px;
+        }
+
+        .cloud1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+
+        .cloud1::after {
+            width: 60px;
+            height: 40px;
+            top: -15px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 120px;
+            height: 50px;
+            top: 30%;
+            left: -120px;
+            animation-delay: 10s;
+        }
+
+        .cloud2::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 15px;
+        }
+
+        .cloud2::after {
+            width: 70px;
+            height: 50px;
+            top: -20px;
+            right: 15px;
+        }
+
+        .cloud3 {
+            width: 90px;
+            height: 35px;
+            top: 60%;
+            left: -90px;
+            animation-delay: 20s;
+        }
+
+        .cloud3::before {
+            width: 45px;
+            height: 45px;
+            top: -20px;
+            left: 12px;
+        }
+
+        .cloud3::after {
+            width: 55px;
+            height: 35px;
+            top: -12px;
+            right: 12px;
+        }
+
+        @keyframes floatCloud {
+            0% { left: -200px; }
+            100% { left: 110%; }
+        }
+
+        /* Sol */
+        .sun {
+            position: absolute;
+            top: 50px;
+            right: 80px;
+            width: 80px;
+            height: 80px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #FFD700;
+            animation: rotateSun 20s linear infinite;
+        }
+
+        .sun::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        @keyframes rotateSun {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: #34495e;
+        }
+
+        /* Botón volver */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: white;
+            border: 3px solid #3498db;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            background: #3498db;
+            color: white;
+        }
+
+        /* Snoopy Container */
+        .snoopy-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        /* Casa de Snoopy */
+        .doghouse {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            margin: 0 auto 50px;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Techo */
+        .roof {
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 100px solid #e74c3c;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Cuerpo de la casa */
+        .house-body {
+            width: 280px;
+            height: 150px;
+            background: #c0392b;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Puerta */
+        .door {
+            width: 80px;
+            height: 100px;
+            background: #34495e;
+            border-radius: 40px 40px 0 0;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Nombre en la casa */
+        .house-name {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Snoopy Character (simplificado) */
+        .snoopy {
+            position: absolute;
+            top: -80px;
+            right: -100px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: snoopyWave 4s ease-in-out infinite;
+        }
+
+        @keyframes snoopyWave {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .snoopy:hover {
+            transform: scale(1.1) !important;
+        }
+
+        .snoopy-head {
+            width: 80px;
+            height: 90px;
+            background: white;
+            border: 3px solid #2c3e50;
+            border-radius: 50% 50% 45% 45%;
+            position: relative;
+        }
+
+        .snoopy-ear {
+            width: 40px;
+            height: 60px;
+            background: #2c3e50;
+            border-radius: 50%;
+            position: absolute;
+            left: -15px;
+            top: 10px;
+        }
+
+        .snoopy-nose {
+            width: 30px;
+            height: 25px;
+            background: #2c3e50;
+            border-radius: 50%;
+            position: absolute;
+            right: -10px;
+            top: 40px;
+        }
+
+        .snoopy-eye {
+            width: 12px;
+            height: 12px;
+            background: #2c3e50;
+            border-radius: 50%;
+            position: absolute;
+            left: 35px;
+            top: 30px;
+        }
+
+        .snoopy-smile {
+            width: 20px;
+            height: 10px;
+            border: 3px solid #2c3e50;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            left: 25px;
+            top: 50px;
+        }
+
+        /* Globos de mensajes */
+        .messages-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 100px;
+        }
+
+        .message-bubble {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #3498db;
+        }
+
+        .message-bubble:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .message-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 0px solid transparent;
+            border-top: 20px solid #3498db;
+        }
+
+        .message-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 33px;
+            width: 0;
+            height: 0;
+            border-left: 17px solid transparent;
+            border-right: 0px solid transparent;
+            border-top: 17px solid white;
+        }
+
+        .message-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .message-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .message-preview {
+            font-size: 1rem;
+            color: #7f8c8d;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: modalPop 0.4s ease;
+            border: 5px solid #3498db;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+
+        .modal-snoopy {
+            text-align: center;
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .modal-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #34495e;
+            text-align: center;
+        }
+
+        /* Corazones flotantes */
+        .floating-heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatHeart 5s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-30px) rotate(15deg);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .doghouse { width: 250px; height: 200px; }
+            .snoopy { right: -50px; top: -60px; transform: scale(0.8); }
+            .messages-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nubes -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <!-- Sol -->
+    <div class="sun"></div>
+
+    <!-- Corazones flotantes -->
+    <div class="floating-heart" style="top: 15%; left: 10%; animation-delay: 0s;">💕</div>
+    <div class="floating-heart" style="top: 25%; right: 15%; animation-delay: 1s;">💖</div>
+    <div class="floating-heart" style="top: 70%; left: 12%; animation-delay: 2s;">💗</div>
+    <div class="floating-heart" style="top: 65%; right: 10%; animation-delay: 3s;">💝</div>
+
+    <!-- Botón volver -->
+    <button class="back-btn" onclick="window.location.href='PG.html'">← Volver</button>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🐶 Mundo Snoopy 🐶</h1>
+        <p>¡Snoopy tiene mensajes especiales para ti!</p>
+    </div>
+
+    <!-- Snoopy Container -->
+    <div class="snoopy-container">
+        <!-- Casa de Snoopy -->
+        <div class="doghouse">
+            <div class="roof"></div>
+            <div class="house-body">
+                <div class="house-name">SNOOPY</div>
+                <div class="door"></div>
+            </div>
+            
+            <!-- Snoopy Character -->
+            <div class="snoopy" onclick="snoopyClick()">
+                <div class="snoopy-head">
+                    <div class="snoopy-ear"></div>
+                    <div class="snoopy-nose"></div>
+                    <div class="snoopy-eye"></div>
+                    <div class="snoopy-smile"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensajes -->
+        <div class="messages-container">
+            <div class="message-bubble" onclick="showMessage('love')">
+                <div class="message-icon">💛</div>
+                <div class="message-title">Mensaje de Amor</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+
+            <div class="message-bubble" onclick="showMessage('happy')">
+                <div class="message-icon">😊</div>
+                <div class="message-title">¡Eres Increíble!</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+
+            <div class="message-bubble" onclick="showMessage('thinking')">
+                <div class="message-icon">💭</div>
+                <div class="message-title">Pensando en Ti</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+
+            <div class="message-bubble" onclick="showMessage('hug')">
+                <div class="message-icon">🤗</div>
+                <div class="message-title">Abrazo Virtual</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+
+            <div class="message-bubble" onclick="showMessage('smile')">
+                <div class="message-icon">😄</div>
+                <div class="message-title">Tu Sonrisa</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+
+            <div class="message-bubble" onclick="showMessage('star')">
+                <div class="message-icon">⭐</div>
+                <div class="message-title">Eres mi Estrella</div>
+                <div class="message-preview">Haz clic para ver...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-snoopy">🐶</div>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-text" id="modalText"></p>
+        </div>
+    </div>
+
+    <script>
+        const messages = {
+            love: {
+                title: '💛 Ohanna, te quieren mucho 💛',
+                text: '¡Guau guau! Snoopy aquí. Quiero que sepas que alguien muy especial te ama con todo su corazón. Cada día piensa en ti y en cómo hacerte sonreír. ¡Eres su persona favorita en todo el mundo! 🐾💕'
+            },
+            happy: {
+                title: '😊 ¡Eres increíble, Ohanna! ✨',
+                text: '¡Woof woof! ¿Sabías que eres asombrosa? Sí, tú. Tu bondad, tu alegría y tu forma de ser iluminan el mundo. Sigue siendo tú misma porque eres perfecta tal como eres. 🌟'
+            },
+            thinking: {
+                title: '💭 Joseph piensa en ti ahora mismo 💕',
+                text: '¡Guau! Desde mi casita puedo ver que alguien está pensando en ti en este preciso momento. Sus pensamientos están llenos de cariño, admiración y amor por ti. ¡No estás sola, siempre estás en su corazón! 💖'
+            },
+            hug: {
+                title: '🤗 Un abrazo especial para ti',
+                text: '¡Arf arf! Aunque soy un perrito de dibujos, quiero enviarte el abrazo más cálido y reconfortante. Imagina que te abrazo fuerte y te digo: "Todo va a estar bien, eres amada y especial". 🐕💝'
+            },
+            smile: {
+                title: '😄 Tu sonrisa ilumina todo',
+                text: '¡Guau guau! Tu sonrisa es como el sol que sale después de la lluvia. Cuando sonríes, todo el mundo se vuelve más bonito. Por favor, nunca dejes de sonreír, Ohanna. Tu felicidad es lo más importante. 🌞💛'
+            },
+            star: {
+                title: '⭐ Eres la estrella más brillante',
+                text: '¡Woof! Desde mi casita, miro al cielo por las noches y veo muchas estrellas, pero ninguna brilla tanto como tú. Eres única, especial e irremplazable. ¡Nunca lo olvides! ✨🌟'
+            }
+        };
+
+        function showMessage(type) {
+            const modal = document.getElementById('modal');
+            const message = messages[type];
+            
+            document.getElementById('modalTitle').textContent = message.title;
+            document.getElementById('modalText').textContent = message.text;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function snoopyClick() {
+            const randomMessages = [
+                '¡Guau guau! ¡Hola Ohanna! 🐶',
+                '¡Woof! ¡Eres genial! 💕',
+                '¡Arf arf! ¡Te quiero! 💖',
+                '¡Guau! ¡Eres la mejor! ⭐',
+                '¡Woof woof! ¡Sonríe! 😊'
+            ];
+            
+            const randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
+            
+            document.getElementById('modalTitle').textContent = randomMessage;
+            document.getElementById('modalText').textContent = '¡Haz clic en los mensajes de abajo para leer más cosas bonitas! 🐾';
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

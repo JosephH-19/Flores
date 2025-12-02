@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Recuerdos 📸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pétalos cayendo */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff6b9d, #ffa8c5);
+            border-radius: 50% 0 50% 0;
+            animation: fall 12s infinite linear;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                transform: rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                top: 110%;
+                transform: rotate(360deg) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            font-weight: 300;
+        }
+
+        /* Botón volver */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background: #fff;
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Masonry Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* Photo Frame */
+        .photo-frame {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-frame:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .photo-frame:hover::before {
+            left: 100%;
+        }
+
+        /* Photo placeholder */
+        .photo {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.1) 25%, 
+                transparent 25%, 
+                transparent 75%, 
+                rgba(255,255,255,0.1) 75%, 
+                rgba(255,255,255,0.1));
+            background-size: 30px 30px;
+        }
+
+        /* Different colors for photos */
+        .photo1 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .photo2 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .photo3 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .photo4 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .photo5 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .photo6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .photo7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .photo8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+
+        /* Caption */
+        .caption {
+            text-align: center;
+            color: #333;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0 10px;
+        }
+
+        .date {
+            text-align: center;
+            color: #999;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: zoomIn 0.4s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+
+        .modal-photo {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .modal-caption {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .modal-date {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .modal-description {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #34495e;
+            text-align: justify;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            text-align: center;
+            margin: 60px auto 40px;
+            padding: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .upload-section h2 {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .upload-section p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .upload-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 30px 20px; }
+            .modal-photo { height: 250px; font-size: 5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pétalos -->
+    <div class="petal" style="left: 5%; animation-delay: 0s;"></div>
+    <div class="petal" style="left: 15%; animation-delay: 2s;"></div>
+    <div class="petal" style="left: 25%; animation-delay: 4s;"></div>
+    <div class="petal" style="left: 35%; animation-delay: 1s;"></div>
+    <div class="petal" style="left: 45%; animation-delay: 3s;"></div>
+    <div class="petal" style="left: 55%; animation-delay: 5s;"></div>
+    <div class="petal" style="left: 65%; animation-delay: 2.5s;"></div>
+    <div class="petal" style="left: 75%; animation-delay: 4.5s;"></div>
+    <div class="petal" style="left: 85%; animation-delay: 1.5s;"></div>
+    <div class="petal" style="left: 95%; animation-delay: 3.5s;"></div>
+
+    <!-- Botón volver -->
+    <button class="back-btn" onclick="window.location.href='PG.html'">← Volver</button>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>📸 Nuestra Galería de Recuerdos 📸</h1>
+        <p>Cada foto cuenta una historia de amor</p>
+    </div>
+
+    <!-- Gallery Container -->
+    <div class="gallery-container">
+        <div class="gallery-grid">
+            <!-- Photo 1 -->
+            <div class="photo-frame" onclick="showPhoto(1)">
+                <div class="photo photo1">💑</div>
+                <div class="caption">Nuestro Primer Encuentro</div>
+                <div class="date">El día que todo comenzó</div>
+            </div>
+
+            <!-- Photo 2 -->
+            <div class="photo-frame" onclick="showPhoto(2)">
+                <div class="photo photo2">🌟</div>
+                <div class="caption">Tu Primera Sonrisa</div>
+                <div class="date">El momento que robó mi corazón</div>
+            </div>
+
+            <!-- Photo 3 -->
+            <div class="photo-frame" onclick="showPhoto(3)">
+                <div class="photo photo3">🌸</div>
+                <div class="caption">Primavera Juntos</div>
+                <div class="date">Flores y risas compartidas</div>
+            </div>
+
+            <!-- Photo 4 -->
+            <div class="photo-frame" onclick="showPhoto(4)">
+                <div class="photo photo4">🌙</div>
+                <div class="caption">Noche de Estrellas</div>
+                <div class="date">Bajo el cielo estrellado</div>
+            </div>
+
+            <!-- Photo 5 -->
+            <div class="photo-frame" onclick="showPhoto(5)">
+                <div class="photo photo5">☕</div>
+                <div class="caption">Cafés y Conversaciones</div>
+                <div class="date">Horas que parecieron minutos</div>
+            </div>
+
+            <!-- Photo 6 -->
+            <div class="photo-frame" onclick="showPhoto(6)">
+                <div class="photo photo6">🎵</div>
+                <div class="caption">Nuestra Canción</div>
+                <div class="date">La melodía de nuestro amor</div>
+            </div>
+
+            <!-- Photo 7 -->
+            <div class="photo-frame" onclick="showPhoto(7)">
+                <div class="photo photo7">🌈</div>
+                <div class="caption">Después de la Lluvia</div>
+                <div class="date">Encontrando belleza juntos</div>
+            </div>
+
+            <!-- Photo 8 -->
+            <div class="photo-frame" onclick="showPhoto(8)">
+                <div class="photo photo8">💖</div>
+                <div class="caption">Este Momento</div>
+                <div class="date">Aquí y ahora, contigo</div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2>✨ Más Recuerdos por Venir ✨</h2>
+            <p>Cada día contigo es una nueva foto para nuestra galería de amor</p>
+            <button class="upload-btn" onclick="alert('¡Pronto agregaremos más momentos especiales juntos! 💕')">
+                📷 Próximamente
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-photo" id="modalPhoto"></div>
+            <h2 class="modal-caption" id="modalCaption"></h2>
+            <div class="modal-date" id="modalDate"></div>
+            <p class="modal-description" id="modalDescription"></p>
+        </div>
+    </div>
+
+    <script>
+        const photos = {
+            1: {
+                icon: '💑',
+                caption: 'Nuestro Primer Encuentro',
+                date: 'El día que todo comenzó',
+                description: 'Recuerdo ese día como si fuera ayer. Cuando te vi por primera vez, supe que eras especial. Tu sonrisa iluminó mi mundo y desde ese momento, mi corazón supo que había encontrado a alguien extraordinario. Ese fue el inicio de la historia más hermosa de mi vida.',
+                color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+            },
+            2: {
+                icon: '🌟',
+                caption: 'Tu Primera Sonrisa',
+                date: 'El momento que robó mi corazón',
+                description: 'Tu sonrisa tiene un poder mágico. Cuando sonríes, todo se vuelve más brillante, más bonito, más perfecto. Esa primera vez que me hiciste sonreír sin razón aparente, supe que me habías conquistado completamente. Tu alegría es contagiosa y tu felicidad es mi mayor tesoro.',
+                color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+            },
+            3: {
+                icon: '🌸',
+                caption: 'Primavera Juntos',
+                date: 'Flores y risas compartidas',
+                description: 'Como las flores en primavera, nuestro amor florece cada día. Ese día entre flores y naturaleza, riendo sin preocupaciones, fue uno de los momentos más puros y hermosos que hemos compartido. Tu risa es como música para mis oídos, y tu compañía es todo lo que necesito.',
+                color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+            },
+            4: {
+                icon: '🌙',
+                caption: 'Noche de Estrellas',
+                date: 'Bajo el cielo estrellado',
+                description: 'Esa noche mirando las estrellas contigo fue mágica. Entre tantas estrellas en el cielo, ninguna brillaba tanto como tú. Hablamos de sueños, de futuro, de nosotros. En ese momento comprendí que quiero pasar cada noche de mi vida a tu lado, contemplando el universo juntos.',
+                color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+            },
+            5: {
+                icon: '☕',
+                caption: 'Cafés y Conversaciones',
+                date: 'Horas que parecieron minutos',
+                description: 'Nuestras conversaciones son mi parte favorita del día. Podemos hablar durante horas y el tiempo simplemente vuela. Cada café contigo es una oportunidad para conocerte más, para enamorarme más de ti, para descubrir nuevas razones por las que eres increíble. Nunca me canso de escucharte.',
+                color: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+            },
+            6: {
+                icon: '🎵',
+                caption: 'Nuestra Canción',
+                date: 'La melodía de nuestro amor',
+                description: 'Cada pareja tiene su canción, y la nuestra es perfecta. Cada vez que la escucho, pienso en ti, en nosotros, en todos nuestros momentos juntos. La música tiene el poder de transportarnos a lugares especiales, y nuestra canción siempre me lleva de vuelta a tu lado.',
+                color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+            },
+            7: {
+                icon: '🌈',
+                caption: 'Después de la Lluvia',
+                date: 'Encontrando belleza juntos',
+                description: 'Después de cada tormenta viene un arcoíris, y contigo he aprendido a encontrar la belleza incluso en los momentos difíciles. Tu optimismo, tu fortaleza y tu forma de ver siempre el lado positivo de las cosas me inspiran cada día. Juntos podemos superar cualquier tormenta.',
+                color: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
+            },
+            8: {
+                icon: '💖',
+                caption: 'Este Momento',
+                date: 'Aquí y ahora, contigo',
+                description: 'Este momento, ahora mismo, es especial porque estás en mi vida. No necesitamos grandes eventos o lugares exóticos para crear recuerdos hermosos. Cada instante contigo es valioso, cada segundo a tu lado es un regalo. Eres mi presente más preciado y mi futuro más anhelado.',
+                color: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)'
+            }
+        };
+
+        function showPhoto(id) {
+            const modal = document.getElementById('modal');
+            const photo = photos[id];
+            
+            const modalPhoto = document.getElementById('modalPhoto');
+            modalPhoto.textContent = photo.icon;
+            modalPhoto.style.background = photo.color;
+            
+            document.getElementById('modalCaption').textContent = photo.caption;
+            document.getElementById('modalDate').textContent = photo.date;
+            document.getElementById('modalDescription').textContent = photo.description;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

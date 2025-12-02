@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartas de Amor 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Corazones flotantes */
+        .floating-heart {
+            position: absolute;
+            animation: floatHeart 8s infinite ease-in-out;
+            pointer-events: none;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(10deg); }
+            50% { transform: translateY(-15px) rotate(-10deg); }
+            75% { transform: translateY(-25px) rotate(5deg); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: #fff;
+            opacity: 0.95;
+        }
+
+        /* Botón volver */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ff6b9d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Letters Container */
+        .letters-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Envelope */
+        .envelope {
+            perspective: 1000px;
+            cursor: pointer;
+            height: 250px;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .envelope:hover .envelope-wrapper {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ff6b9d;
+            backface-visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .envelope:hover .envelope-front {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+        }
+
+        .envelope-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .envelope-title {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .envelope-subtitle {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .seal {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #ff6b9d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff 0%, #ffecd2 100%);
+            padding: 50px;
+            border-radius: 25px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: letterOpen 0.6s ease;
+            border: 5px solid #ff6b9d;
+        }
+
+        @keyframes letterOpen {
+            0% {
+                transform: scale(0.8) rotateX(-90deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #95a5a6;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #ff6b9d;
+            padding-bottom: 20px;
+        }
+
+        .letter-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+        }
+
+        .letter-date {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .letter-body {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            line-height: 2;
+            color: #2c3e50;
+            text-align: justify;
+            padding: 20px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .letter-body p {
+            margin-bottom: 20px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ff6b9d;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ff6b9d;
+        }
+
+        .letter-ps {
+            margin-top: 20px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Decoraciones */
+        .letter-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .letters-container { grid-template-columns: 1fr; }
+            .modal-content { padding: 30px 20px; }
+            .letter-body { font-size: 1.3rem; }
+            .letter-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Corazones flotantes -->
+    <div class="floating-heart" style="top: 10%; left: 10%; animation-delay: 0s;">💕</div>
+    <div class="floating-heart" style="top: 20%; right: 15%; animation-delay: 1s;">💖</div>
+    <div class="floating-heart" style="top: 40%; left: 5%; animation-delay: 2s;">💗</div>
+    <div class="floating-heart" style="top: 60%; right: 10%; animation-delay: 3s;">💝</div>
+    <div class="floating-heart" style="top: 80%; left: 15%; animation-delay: 4s;">💘</div>
+    <div class="floating-heart" style="top: 70%; right: 20%; animation-delay: 2.5s;">💞</div>
+
+    <!-- Botón volver -->
+    <button class="back-btn" onclick="window.location.href='PG.html'">← Volver</button>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>💌 Cartas de Amor para Ti 💌</h1>
+        <p>Palabras desde el corazón, escritas con amor</p>
+    </div>
+
+    <!-- Letters Container -->
+    <div class="letters-container">
+        <!-- Carta 1 -->
+        <div class="envelope" onclick="openLetter(1)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💌</div>
+                    <div class="envelope-title">Para Mi Ohanna</div>
+                    <div class="envelope-subtitle">La carta más importante</div>
+                    <div class="seal">💖</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta 2 -->
+        <div class="envelope" onclick="openLetter(2)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💝</div>
+                    <div class="envelope-title">10 Razones</div>
+                    <div class="envelope-subtitle">Por las que te amo</div>
+                    <div class="seal">💕</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta 3 -->
+        <div class="envelope" onclick="openLetter(3)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💗</div>
+                    <div class="envelope-title">Mis Promesas</div>
+                    <div class="envelope-subtitle">Para ti y nuestro futuro</div>
+                    <div class="seal">💘</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta 4 -->
+        <div class="envelope" onclick="openLetter(4)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💞</div>
+                    <div class="envelope-title">Gracias</div>
+                    <div class="envelope-subtitle">Por ser tú</div>
+                    <div class="seal">💓</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta 5 -->
+        <div class="envelope" onclick="openLetter(5)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💖</div>
+                    <div class="envelope-title">Nuestros Sueños</div>
+                    <div class="envelope-subtitle">El futuro que imagino</div>
+                    <div class="seal">✨</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carta 6 -->
+        <div class="envelope" onclick="openLetter(6)">
+            <div class="envelope-wrapper">
+                <div class="envelope-front">
+                    <div class="envelope-icon">💘</div>
+                    <div class="envelope-title">Eres Mi Todo</div>
+                    <div class="envelope-subtitle">Lo que significas para mí</div>
+                    <div class="seal">🌟</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="letter-decoration" style="top: 20px; left: 20px;">🌸</div>
+            <div class="letter-decoration" style="top: 20px; right: 20px;">🌺</div>
+            <div class="letter-decoration" style="bottom: 20px; left: 20px;">🌷</div>
+            <div class="letter-decoration" style="bottom: 20px; right: 20px;">🌻</div>
+            
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            
+            <div class="letter-header">
+                <h2 class="letter-title" id="letterTitle"></h2>
+                <div class="letter-date" id="letterDate"></div>
+            </div>
+            
+            <div class="letter-body" id="letterBody"></div>
+            
+            <div class="letter-signature">
+                Con todo mi amor,<br>
+                J.Eduardo HB 💖
+            </div>
+            
+            <div class="letter-ps" id="letterPS"></div>
+        </div>
+    </div>
+
+    <script>
+        const letters = {
+            1: {
+                title: 'Para Mi Ohanna',
+                date: 'Hoy y siempre',
+                body: `
+                    <p>Mi querida Ohanna,</p>
+                    <p>Escribo estas palabras con el corazón lleno de amor y las manos temblorosas de emoción. Desde que llegaste a mi vida, todo tiene más sentido, más color, más alegría.</p>
+                    <p>Eres la persona más especial que he conocido. Tu sonrisa ilumina mis días más oscuros, tu voz es la melodía más hermosa que existe, y tu presencia es el regalo más valioso que he recibido.</p>
+                    <p>Quiero que sepas que cada día me enamoro más de ti. De tu forma de ser, de tus sueños, de tus peculiaridades, de todo lo que te hace ser TÚ.</p>
+                    <p>Gracias por existir, por estar en mi vida, por permitirme amarte. Eres y serás siempre mi persona favorita en todo el universo.</p>
+                `,
+                ps: 'P.D: Te amo más de lo que las palabras pueden expresar 💕'
+            },
+            2: {
+                title: '10 Razones Por Las Que Te Amo',
+                date: 'Entre infinitas razones...',
+                body: `
+                    <p>Ohanna, mi amor, aquí van solo 10 de las infinitas razones por las que te amo:</p>
+                    <p>1. Tu sonrisa que ilumina incluso mis días más grises.<br>
+                    2. Tu bondad y la forma en que tratas a todos con amor.<br>
+                    3. Tu inteligencia que me sorprende cada día.<br>
+                    4. Tu sentido del humor que me hace reír sin parar.<br>
+                    5. Tu paciencia conmigo, incluso cuando no la merezco.</p>
+                    <p>6. Tus sueños y ambiciones que me inspiran.<br>
+                    7. Tu forma única de ver el mundo.<br>
+                    8. La paz que siento cuando estoy contigo.<br>
+                    9. Tu autenticidad, nunca pretendes ser alguien que no eres.<br>
+                    10. Simplemente por ser TÚ, perfecta en tu imperfección.</p>
+                    <p>Podría escribir mil razones más, pero lo más importante es que te amo por quien eres, completa e incondicionalmente.</p>
+                `,
+                ps: 'P.D: Cada día descubro nuevas razones para amarte más 💗'
+            },
+            3: {
+                title: 'Mis Promesas Para Ti',
+                date: 'Compromisos del corazón',
+                body: `
+                    <p>Mi amada Ohanna,</p>
+                    <p>Hoy quiero hacerte promesas que nacen desde lo más profundo de mi corazón:</p>
+                    <p>Prometo amarte en tus mejores días y en los más difíciles. Prometo estar a tu lado cuando me necesites y respetarte cuando necesites espacio.</p>
+                    <p>Prometo apoyar tus sueños como si fueran míos, porque tu felicidad es mi felicidad. Prometo escucharte siempre, no solo oír tus palabras, sino entender tu corazón.</p>
+                    <p>Prometo hacerte reír cuando estés triste, cuidarte cuando estés enferma, y celebrar contigo cada pequeña victoria.</p>
+                    <p>Prometo crecer contigo, aprender contigo, y construir juntos el futuro que ambos soñamos. Prometo ser tu mejor amigo, tu confidente, tu compañero de aventuras.</p>
+                    <p>Pero sobre todo, prometo amarte por siempre, sin condiciones, sin límites, con todo mi ser.</p>
+                `,
+                ps: 'P.D: Estas promesas son para toda la vida 💘'
+            },
+            4: {
+                title: 'Gracias Por Ser Tú',
+                date: 'Con gratitud infinita',
+                body: `
+                    <p>Ohanna, mi amor,</p>
+                    <p>Hoy quiero darte las gracias. Gracias por ser exactamente quien eres, sin pretensiones, sin máscaras, auténtica y real.</p>
+                    <p>Gracias por tu amor, por tu paciencia, por tu comprensión. Gracias por ver lo mejor en mí incluso cuando yo no lo veo.</p>
+                    <p>Gracias por las risas compartidas, por las conversaciones profundas a altas horas de la noche, por los silencios cómodos que solo nosotros entendemos.</p>
+                    <p>Gracias por hacer que cada día sea especial, por encontrar magia en las cosas simples, por enseñarme a apreciar cada momento.</p>
+                    <p>Gracias por elegirme, por confiar en mí, por permitirme ser parte de tu vida. Es el honor más grande que he tenido.</p>
+                    <p>Pero sobre todo, gracias por existir. El mundo es infinitamente mejor contigo en él, y mi vida tiene sentido porque tú estás en ella.</p>
+                `,
+                ps: 'P.D: Nunca podré agradecerte lo suficiente por todo lo que eres 💞'
+            },
+            5: {
+                title: 'Nuestros Sueños',
+                date: 'El futuro que imagino',
+                body: `
+                    <p>Mi querida Ohanna,</p>
+                    <p>Cuando cierro los ojos e imagino el futuro, todos mis sueños te incluyen. No puedo imaginar un mañana sin ti.</p>
+                    <p>Sueño con despertares tranquilos a tu lado, con desayunos compartidos mientras planeamos nuestro día. Sueño con aventuras juntos, explorando el mundo tomados de la mano.</p>
+                    <p>Sueño con construir un hogar lleno de amor, risas y recuerdos hermosos. Un lugar donde siempre nos sintamos seguros y amados.</p>
+                    <p>Sueño con apoyarte en todos tus proyectos, ver cómo alcanzas tus metas y celebrar cada logro como si fuera mío, porque en realidad, tus victorias son nuestras victorias.</p>
+                    <p>Sueño con envejecer contigo, con seguir enamorándome de ti cada día, con crear una historia de amor que inspire a otros.</p>
+                    <p>Todos mis sueños más bonitos empiezan y terminan contigo, porque tú eres mi sueño hecho realidad.</p>
+                `,
+                ps: 'P.D: Construyamos juntos el futuro más hermoso 💫'
+            },
+            6: {
+                title: 'Eres Mi Todo',
+                date: 'Lo que significas para mí',
+                body: `
+                    <p>Ohanna, amor de mi vida,</p>
+                    <p>Hay tantas formas de describir lo que significas para mí que las palabras se quedan cortas. Pero intentaré expresarlo:</p>
+                    <p>Eres mi sol en los días nublados, mi brújula cuando me siento perdido, mi refugio en medio de la tormenta. Eres la paz que necesito cuando el mundo es caótico.</p>
+                    <p>Eres mi mejor amiga, mi confidente, la persona con quien puedo ser completamente yo mismo sin miedo al juicio. Eres mi inspiración para ser mejor cada día.</p>
+                    <p>Eres la razón por la que sonrío sin motivo aparente, la melodía que tararea mi corazón, el pensamiento más dulce antes de dormir y al despertar.</p>
+                    <p>Eres mi presente más valioso y mi futuro más anhelado. Eres la respuesta a preguntas que ni siquiera sabía que tenía.</p>
+                    <p>En pocas palabras: Eres mi TODO. Mi amor, mi vida, mi corazón. Y lo serás por siempre.</p>
+                `,
+                ps: 'P.D: Te amo hoy, mañana y siempre, mi Ohanna 💖✨'
+            }
+        };
+
+        function openLetter(id) {
+            const modal = document.getElementById('modal');
+            const letter = letters[id];
+            
+            document.getElementById('letterTitle').textContent = letter.title;
+            document.getElementById('letterDate').textContent = letter.date;
+            document.getElementById('letterBody').innerHTML = letter.body;
+            document.getElementById('letterPS').textContent = letter.ps;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>
